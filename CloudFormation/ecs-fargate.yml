@@ -131,7 +131,7 @@ Resources:
       Cluster: !Ref ClusterName
       ServiceName: !Ref ServiceName
       TaskDefinition: !Ref TaskDefinition
-      DesiredCount: '1'
+      DesiredCount: 1
       LaunchType: FARGATE
       NetworkConfiguration:
         awsvpcConfiguration:

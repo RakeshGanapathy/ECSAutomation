@@ -16,6 +16,7 @@ node {
     sh 'docker tag pfm-pro:latest 964826016001.dkr.ecr.ap-south-1.amazonaws.com/pfm-pro:latest'
   }
 
+
   stage('Push Image') {
     sh 'docker login -u AWS -p $(aws ecr get-login-password --region ap-south-1) 964826016001.dkr.ecr.ap-south-1.amazonaws.com'
      try {
@@ -36,7 +37,12 @@ node {
 
         if (status == 'CREATE_COMPLETE') {
           echo "Stack exists, attempting update ..."
-          sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
+          sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM"
+        }
+        else if (status == 'UPDATE_ROLLBACK_COMPLETE'){
+            sh "aws cloudformation delete-stack --stack-name ecs-fargate --region 'ap-south-1'"
+            sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
+        
         }
         else {
           echo "Waiting for stack create to complete in Else block.."
