@@ -30,6 +30,7 @@ node {
     try {
       sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --region 'ap-south-1'"
     } catch (error) {
+       echo error
       //sh "aws cloudformation update-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --region 'ap-south-1'"
     }
   }
