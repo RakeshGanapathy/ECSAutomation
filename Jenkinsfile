@@ -33,8 +33,8 @@ node {
       status = sh(script: "aws cloudformation describe-stacks --region 'ap-south-1' \
                             --stack-name ecs-fargate --query Stacks[0].StackStatus --output text", returnStdout: true)
                             apply = true
-      sh "echo $status" 
-      if (status == CREATE_COMPLETE) {
+      echo status
+      if (status == "CREATE_COMPLETE") {
         echo "Stack exists, attempting update ..."
         sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
       }
