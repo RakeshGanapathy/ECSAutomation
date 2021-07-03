@@ -31,7 +31,7 @@ node {
   stage('Deploy') {
     try {
       status = sh(script: "aws cloudformation describe-stacks --region 'ap-south-1' \
-                            --stack-name ${params.ZK_FX_STACK} --query Stacks[0].StackStatus --output text", returnStdout: true)
+                            --stack-name ecs-fargate --query Stacks[0].StackStatus --output text", returnStdout: true)
                             apply = true
       sh "echo $status" 
       if ($status == 'CREATE_COMPLETE') {
