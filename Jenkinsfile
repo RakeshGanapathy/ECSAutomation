@@ -34,13 +34,13 @@ node {
                             --stack-name ecs-fargate --query Stacks[0].StackStatus --output text", returnStdout: true)
       echo status
 
-        if (status.equals('CREATE_COMPLETE')) {
+        if (status == 'CREATE_COMPLETE') {
           echo "Stack exists, attempting update ..."
           sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
         }
         else {
           echo "Waiting for stack create to complete in Else block.."
-          sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
+          sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM"
         }
     } catch (error) {
       echo "Waiting for stack update to complete in catch block.."
