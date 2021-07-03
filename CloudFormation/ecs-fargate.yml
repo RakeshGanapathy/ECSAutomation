@@ -10,9 +10,11 @@ Parameters:
   SubnetId1:
     Type: String
     Description: subnets in your selected VPC.
+    Default: ''
   SubnetId2:
     Type: String
     Description: subnets in your selected VPC.
+    Default: ''
   TaskRole:
     Type: String
     Description: Task role name
