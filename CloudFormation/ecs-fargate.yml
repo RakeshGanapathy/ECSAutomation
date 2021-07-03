@@ -3,7 +3,7 @@ Parameters:
     Type: String
     Description: Cluster creation
     Default: Platform
-   VpcId:
+  VpcId:
     Type: String
     Description: Select a VPC that allows instances access to the Internet.
   SubnetId1:
