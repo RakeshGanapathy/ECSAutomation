@@ -17,7 +17,7 @@ node {
 
   stage('Push Image') {
     sh 'docker login -u AWS -p $(aws ecr get-login-password --region ap-south-1) 964826016001.dkr.ecr.ap-south-1.amazonaws.com'
-    sh 'aws ecr create-repository --repository-name pfm-pro --image-tag-mutability IMMUTABLE'
+    sh 'aws ecr create-repository --repository-name pfm-pro --region ap-south-1 --image-tag-mutability IMMUTABLE'
     sh 'docker push 964826016001.dkr.ecr.ap-south-1.amazonaws.com/pfm-pro:latest'
   }
 
