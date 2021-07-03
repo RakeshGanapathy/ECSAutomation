@@ -34,7 +34,7 @@ node {
                             --stack-name ecs-fargate --query Stacks[0].StackStatus --output text", returnStdout: true)
       echo status
 
-        if (status.equalsIgnoreCase('CREATE_COMPLETE')) {
+        if (status.equals('CREATE_COMPLETE')) {
           echo "Stack exists, attempting update ..."
           sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
         }
