@@ -39,13 +39,6 @@ Parameters:
   ContainerPort:
     Type: Number
     Default: 90
-  SubnetConfig:
-    VPC:
-      CIDR: '10.0.0.0/16'
-    PublicOne:
-      CIDR: '10.0.0.0/24'
-    PrivateOne:
-      CIDR: '10.0.2.0/24'
 
 Resources:
   ECSCluster:
@@ -130,18 +123,18 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
 
-  Service:
-    Type: AWS::ECS::Service
-    Properties:
-      Cluster: !Ref ClusterName
-      ServiceName: !Ref ServiceName
-      TaskDefinition: !Ref TaskDefinition
-      DesiredCount: '1'
-      LaunchType: FARGATE
-      NetworkConfiguration:
-        awsvpcConfiguration:
-          SecurityGroups: !Ref SecurityGroup
-          Subnet:  !Ref Subnet
+  # Service:
+  #   Type: AWS::ECS::Service
+  #   Properties:
+  #     Cluster: !Ref ClusterName
+  #     ServiceName: !Ref ServiceName
+  #     TaskDefinition: !Ref TaskDefinition
+  #     DesiredCount: '1'
+  #     LaunchType: FARGATE
+  #     NetworkConfiguration:
+  #       awsvpcConfiguration:
+  #         SecurityGroups: !Ref SecurityGroup
+  #         Subnet:  !Ref Subnet
       
 
 
