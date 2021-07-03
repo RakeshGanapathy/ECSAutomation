@@ -35,7 +35,7 @@ node {
                             apply = true
       sh "echo $status" 
       if ($status == 'CREATE_COMPLETE') {
-        echo -e "\nStack exists, attempting update ..."
+        echo "Stack exists, attempting update ..."
         sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
       }
       else {
