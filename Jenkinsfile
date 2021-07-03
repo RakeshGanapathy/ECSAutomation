@@ -29,14 +29,14 @@ node {
 
   stage('Deploy') {
     try {
-      if (! sh aws cloudformation describe-stacks --stack-name ecs-fargate --region 'ap-south-1'); then
-        sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
-      
-      else 
+      if (sh aws cloudformation describe-stacks --stack-name ecs-fargate --region 'ap-south-1'); {
         echo -e "\nStack exists, attempting update ..."
         sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
-
-    
+      }
+      else {
+        sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
+      }
+        
     echo "Waiting for stack update to complete ..."
     sh "aws cloudformation wait stack-update-complete --region 'ap-south-1' --stack-name ecs-fargate "
 
