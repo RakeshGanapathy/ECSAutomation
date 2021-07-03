@@ -29,7 +29,7 @@ node {
 
   stage('Deploy') {
     try {
-      if (sh aws cloudformation describe-stacks --stack-name ecs-fargate --region 'ap-south-1'); {
+      if (sh "aws cloudformation describe-stacks --stack-name ecs-fargate --region 'ap-south-1'"); {
         echo -e "\nStack exists, attempting update ..."
         sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
       }
