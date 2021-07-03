@@ -1,6 +1,6 @@
 node {
   stage('Prepare') {
-    git 'https://github.com/RakeshGanapathy/ecs-ecr.git'
+    git 'https://github.com/RakeshGanapathy/ECSAutomation.git'
   }
 
   stage('Build') {
