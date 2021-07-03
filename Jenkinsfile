@@ -29,7 +29,7 @@ node {
 
   stage('Deploy') {
     try {
-      if ! sh aws cloudformation describe-stacks --stack-name ecs-fargate --region 'ap-south-1'  ; then
+      if !(sh aws cloudformation describe-stacks --stack-name ecs-fargate --region 'ap-south-1'); then
         sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
       
       else 
