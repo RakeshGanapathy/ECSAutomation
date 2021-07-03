@@ -6,11 +6,11 @@ Parameters:
   VpcId:
     Type: String
     Description: Select a VPC that allows instances access to the Internet.
-    Default: ''
+    Default: Vpctest
   SubnetId1:
     Type: String
     Description: subnets in your selected VPC.
-    Default: ''
+    Default: subnet-a08618db
   SubnetId2:
     Type: String
     Description: subnets in your selected VPC.
@@ -37,7 +37,7 @@ Parameters:
     Default: latest
   SecurityGroup:
     Type: String
-    Default: latest
+    Default: sg-088ce769b248d5f05
   ContainerPort:
     Type: Number
     Default: 90
@@ -125,18 +125,18 @@ Resources:
         - 'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'
         - 'arn:aws:iam::aws:policy/AmazonS3FullAccess'
 
-  # Service:
-  #   Type: AWS::ECS::Service
-  #   Properties:
-  #     Cluster: !Ref ClusterName
-  #     ServiceName: !Ref ServiceName
-  #     TaskDefinition: !Ref TaskDefinition
-  #     DesiredCount: '1'
-  #     LaunchType: FARGATE
-  #     NetworkConfiguration:
-  #       awsvpcConfiguration:
-  #         SecurityGroups: !Ref SecurityGroup
-  #         Subnet:  !Ref Subnet
+  Service:
+    Type: AWS::ECS::Service
+    Properties:
+      Cluster: !Ref ClusterName
+      ServiceName: !Ref ServiceName
+      TaskDefinition: !Ref TaskDefinition
+      DesiredCount: '1'
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        awsvpcConfiguration:
+          SecurityGroups: !Ref SecurityGroup
+          Subnet:  !Ref SubnetId1
       
 
 
