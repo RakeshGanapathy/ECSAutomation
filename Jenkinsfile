@@ -1,4 +1,5 @@
 node {
+
   stage('Prepare') {
     git 'https://github.com/RakeshGanapathy/ECSAutomation.git'
   }
@@ -29,20 +30,23 @@ node {
 
   stage('Deploy') {
     try {
-      if (sh "aws cloudformation describe-stacks --stack-name ecs-fargate --region 'ap-south-1'"); {
+      status = sh(script: "aws cloudformation describe-stacks --region 'ap-south-1' \
+                            --stack-name ${params.ZK_FX_STACK} --query Stacks[0].StackStatus --output text", returnStdout: true)
+                            apply = true
+      sh "echo $status" 
+      if ($status == 'CREATE_COMPLETE'); {
         echo -e "\nStack exists, attempting update ..."
         sh "aws cloudformation update-stack --region 'ap-south-1' --stack-name ecs-fargate --capabilities CAPABILITY_NAMED_IAM"
       }
       else {
-        sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
+        echo "Waiting for stack update to complete in Else block.."
+         sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
       }
-        
+    } catch (error) {
+      echo "Waiting for stack update to complete in catch block.."
+        sh "aws cloudformation create-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
+    }
     echo "Waiting for stack update to complete ..."
     sh "aws cloudformation wait stack-update-complete --region 'ap-south-1' --stack-name ecs-fargate "
-
-    } catch (error) {
-        echo error
-        sh "aws cloudformation update-stack --stack-name ecs-fargate --template-body file://CloudFormation//ecs-fargate.yml --capabilities CAPABILITY_NAMED_IAM --region 'ap-south-1'"
-    }
   }
 }
