@@ -6,6 +6,7 @@ Parameters:
   VpcId:
     Type: String
     Description: Select a VPC that allows instances access to the Internet.
+    Default: ''
   SubnetId1:
     Type: String
     Description: subnets in your selected VPC.
