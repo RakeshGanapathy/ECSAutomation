@@ -2,7 +2,7 @@ node {
 
   stage('Prepare') {
     git 'https://github.com/RakeshGanapathy/ECSAutomation.git'
-    echo "branchname: ${env.BRANCH_NAME}"
+    echo "branchname: ${BRANCH_NAME}"
   }
 
   stage('Build') {
