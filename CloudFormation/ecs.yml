@@ -1,0 +1,98 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: This template create an Application Load Balancer with EC2 InfraStructure
+Parameters:
+  ClusterName:
+    Description: cluster name for ecs instance.
+    Type: String
+    Default: DebugDojo1
+  RoleName:
+    Description: role name for ecs instance.
+    Type: String
+    Default: docker-pull  
+  ContainerName1:
+    Description: container name for ecs task definition.
+    Type: String
+    Default: Debug
+  ContainerName2:
+    Description:  container name for ecs task definition
+    Type: String
+    Default: Dojo
+  ImageName1:
+    Description: image name for ecs container.
+    Type: String
+    Default: pfm-adapt
+  ImageName2:
+    Description: image name for ecs container.
+    Type: String
+    Default: pfm-pro
+  ContainerPort1:
+    Description:  container name for ecs task definition
+    Type: String
+    Default: 90
+  ContainerPort2:
+    Description:  container name for ecs task definition
+    Type: String
+    Default: 8080
+  TaskDefinitionName:
+    Description:  container name for ecs task definition
+    Type: String
+    Default: DebugTask
+  Version:
+    Description:  version name for ecs task definition
+    Type: String
+    Default: latest  
+Resources:
+
+  ECSCluster:
+    Type: 'AWS::ECS::Cluster'
+    Properties:
+      ClusterName: !Ref ClusterName
+      Tags: 
+        - Key: "team"
+          Value: "devops"
+        - Key: "owner"
+          Value: "jack"
+  
+  ECSTaskDefinition:
+    Type: 'AWS::ECS::TaskDefinition'
+    Properties:
+      Family: !Ref TaskDefinitionName
+      RequiresCompatibilities:
+        - "FARGATE"
+      Cpu: 1024
+      Memory: 2GB
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/${RoleName}
+      TaskRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/${RoleName}
+      ContainerDefinitions: 
+        - Name: !Ref ContainerName1
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ImageName1}:${Version}
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort1
+        - Name: !Ref ContainerName2
+          Image: !Sub ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ImageName2}:${Version}
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort2
+      Tags: 
+        - Key: "team"
+          Value: "devops"
+        - Key: "owner"
+          Value: "jack"
+  
+  ECSService:
+    DependsOn: ECSTaskDefinition 
+    Type: 'AWS::ECS::Service'
+    Properties:
+      Cluster: !Ref ClusterName
+      DesiredCount: 1
+      LaunchType: FARGATE
+      ServiceName: Service1
+      TaskDefinition: !Ref ECSTaskDefinition
+      NetworkConfiguration: 
+        AwsvpcConfiguration:
+          SecurityGroups: 
+            - sg-0cc4e3e018029219d
+          Subnets: 
+            - subnet-0f95cf43
+          AssignPublicIp: ENABLED
+    
